@@ -81,7 +81,7 @@ public class AuthController {
                 .orElseThrow(() -> new BadCredentialsException("User not found"));
 
         auditService.event("LOGIN", user.getId(), user.getUsername());
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name(), request.isRemember());
         return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole().name(), user.getFullName()));
     }
 
