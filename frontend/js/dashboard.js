@@ -333,7 +333,7 @@ if (logoutLink) {
       }
     } catch (err) { /* best effort */ }
     try {
-      ['lifetag_token', 'lifetag_username', 'lifetag_role', 'lifetag_fullName', 'lifetag_current_user']
+      ['lifetag_token', 'lifetag_username', 'lifetag_role', 'lifetag_fullName', 'lifetag_current_user', 'lifetag_remember']
         .forEach((k) => localStorage.removeItem(k));
     } catch (err) { /* storage unavailable: nothing to clear */ }
   });
