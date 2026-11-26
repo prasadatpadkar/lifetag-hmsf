@@ -43,6 +43,16 @@ const usernameError = document.getElementById('usernameError');
 const passwordError = document.getElementById('passwordError');
 const formNote = document.getElementById('formNote');
 const submitBtn = form.querySelector('button[type="submit"]');
+const rememberInput = document.getElementById('remember');
+
+// "Remember this device": pre-fill the last username and re-tick the box on return visits.
+try {
+  const savedUser = localStorage.getItem('lifetag_remembered_username');
+  if (savedUser && rememberInput) {
+    usernameInput.value = savedUser;
+    rememberInput.checked = true;
+  }
+} catch (e) { /* storage unavailable */ }
 
 const roleDisplayNames = { admin: 'Admin', doctor: 'Doctor', reception: 'Reception', patient: 'Patient' };
 
@@ -80,7 +90,7 @@ form.addEventListener('submit', async function (e) {
   submitBtn.textContent = 'Signing in...';
 
   try {
-    const data = await LifetagAPI.login(usernameInput.value.trim(), passwordInput.value);
+    const data = await LifetagAPI.login(usernameInput.value.trim(), passwordInput.value, rememberInput && rememberInput.checked);
     // data: { token, username, role, fullName } — role comes back as "ADMIN" / "DOCTOR" / etc.
     const role = (data.role || '').toLowerCase();
 
@@ -98,7 +108,12 @@ form.addEventListener('submit', async function (e) {
       return;
     }
 
-    LifetagAPI.setSession(data);
+    const remember = !!(rememberInput && rememberInput.checked);
+    LifetagAPI.setSession(data, remember);
+    try {
+      if (remember) localStorage.setItem('lifetag_remembered_username', data.username);
+      else localStorage.removeItem('lifetag_remembered_username');
+    } catch (e) { /* storage unavailable */ }
 
     // Keep a small, human-friendly session record so the existing dashboard/activity-log
     // pages (which were built against localStorage mock data) keep working unchanged.
