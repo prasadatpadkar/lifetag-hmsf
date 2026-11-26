@@ -72,12 +72,29 @@ const LifetagGuard = (() => {
   }
 
   function toLogin() {
-    ["lifetag_token", "lifetag_username", "lifetag_role", "lifetag_fullName", "lifetag_current_user"]
+    ["lifetag_token", "lifetag_username", "lifetag_role", "lifetag_fullName", "lifetag_current_user", "lifetag_remember"]
       .forEach((k) => localStorage.removeItem(k));
+    document.cookie = "lifetag_session_alive=; path=/; max-age=0; SameSite=Strict";
     window.location.replace(window.location.pathname.replace(/\/pages\/[^/]*$/, "/index.html"));
   }
 
+  // "Remember this device" unticked => the session only lives while this browser session
+  // does. The session is kept in localStorage (the whole app reads it from there), so a
+  // session cookie (shared by all tabs, cleared when the browser closes) tells us whether
+  // the browser was closed and reopened since login.
+  function dropIfNotRemembered() {
+    try {
+      if (localStorage.getItem("lifetag_token")
+          && localStorage.getItem("lifetag_remember") !== "1"
+          && !/(?:^|;\s*)lifetag_session_alive=1/.test(document.cookie)) {
+        ["lifetag_token", "lifetag_username", "lifetag_role", "lifetag_fullName", "lifetag_current_user"]
+          .forEach((k) => localStorage.removeItem(k));
+      }
+    } catch (e) { /* storage unavailable */ }
+  }
+
   function check() {
+    dropIfNotRemembered();
     if (!window.location.pathname.includes("/pages/")) return; // login/signup pages are public
     const file = window.location.pathname.split("/").pop();
     const token = localStorage.getItem("lifetag_token");
@@ -105,7 +122,13 @@ const LifetagAPI = {
   getToken() {
     return localStorage.getItem("lifetag_token");
   },
-  setSession({ token, username, role, fullName }) {
+  setSession({ token, username, role, fullName }, remember = false) {
+    if (remember) {
+      localStorage.setItem("lifetag_remember", "1");
+    } else {
+      localStorage.removeItem("lifetag_remember");
+      document.cookie = "lifetag_session_alive=1; path=/; SameSite=Strict"; // no max-age => ends with the browser session
+    }
     localStorage.setItem("lifetag_token", token);
     localStorage.setItem("lifetag_username", username);
     localStorage.setItem("lifetag_role", role);
@@ -116,6 +139,8 @@ const LifetagAPI = {
     localStorage.removeItem("lifetag_username");
     localStorage.removeItem("lifetag_role");
     localStorage.removeItem("lifetag_fullName");
+    localStorage.removeItem("lifetag_remember");
+    document.cookie = "lifetag_session_alive=; path=/; max-age=0; SameSite=Strict";
   },
   isLoggedIn() {
     return !!this.getToken();
@@ -184,8 +209,8 @@ const LifetagAPI = {
   },
 
   // ---- auth ----
-  login(username, password) {
-    return this.request("/auth/login", { method: "POST", body: { username, password }, auth: false });
+  login(username, password, remember = false) {
+    return this.request("/auth/login", { method: "POST", body: { username, password, remember: !!remember }, auth: false });
   },
   register(payload) {
     return this.request("/auth/register", { method: "POST", body: payload, auth: false });
