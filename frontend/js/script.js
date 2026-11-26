@@ -115,6 +115,17 @@ form.addEventListener('submit', async function (e) {
       else localStorage.removeItem('lifetag_remembered_username');
     } catch (e) { /* storage unavailable */ }
 
+    // Hand the credentials to the browser's own password manager (encrypted, autofills next
+    // visit). We never keep the password ourselves. Supported in Chrome/Edge; other browsers
+    // offer to save it on their own when the page navigates after sign-in.
+    if (remember && window.PasswordCredential && navigator.credentials) {
+      try {
+        await navigator.credentials.store(new PasswordCredential({
+          id: usernameInput.value.trim(), password: passwordInput.value, name: data.fullName || data.username
+        }));
+      } catch (e) { /* user declined or unsupported: ignore */ }
+    }
+
     // Keep a small, human-friendly session record so the existing dashboard/activity-log
     // pages (which were built against localStorage mock data) keep working unchanged.
     localStorage.setItem('lifetag_current_user', JSON.stringify({
