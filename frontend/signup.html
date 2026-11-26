@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Create Patient Account &mdash; Lifetag HMS</title>
+<script>(function(){try{var t=localStorage.getItem('lifetag_theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div class="screen">
+
+  <div class="brand-panel">
+    <a class="wordmark" href="index.html" aria-label="Lifetag home"><svg class="brand-glyph" viewBox="0 0 22 26" aria-hidden="true"><path class="g-thread" d="M7 1v9"/><path class="g-body" d="M2 5h12l6 6v13H2z"/><circle class="g-hole" cx="7" cy="12" r="2.6"/></svg><span>lifetag</span></a>
+
+    <div class="brand-panel__body">
+      <p class="brand-panel__headline">Your tag starts here.</p>
+      <p class="brand-panel__lede">Create a patient account to see your appointments, records and bills in one place.</p>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <div class="form-panel__topbar">
+      <button type="button" class="theme-toggle" id="themeToggleBtn" aria-label="Toggle dark mode">
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+      </button>
+    </div>
+    <div class="form-panel__center">
+    <div class="form-card">
+      <span class="tag-corner" aria-hidden="true"></span>
+<h1 class="form-title">Create your patient account</h1>
+      <p class="form-subtitle">
+        This is for patients only. Doctor, Reception, and Admin logins are set up by an
+        administrator, who will share a temporary password with you separately.
+      </p>
+
+      <form id="signupForm" novalidate>
+        <div class="field">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="e.g. Rohan Mehta" required>
+          <span class="field-error" id="fullNameError"></span>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="e.g. rohan.mehta@example.com" required>
+          <span class="field-error" id="emailError"></span>
+        </div>
+
+        <div class="field">
+          <label for="username">Choose a username</label>
+          <input type="text" id="username" name="username" placeholder="e.g. rohan.mehta" required>
+          <span class="field-error" id="usernameError"></span>
+        </div>
+
+        <div class="field">
+          <label for="password">Choose a password</label>
+          <input type="password" id="password" name="password" placeholder="At least 8 characters" minlength="8" required>
+          <span class="field-error" id="passwordError"></span>
+        </div>
+
+        <button type="submit" class="btn-primary">Create account</button>
+
+        <p class="form-note" id="formNote" aria-live="polite"></p>
+      </form>
+
+      <p class="form-note" style="margin-top:20px;">Already have an account? <a href="index.html" class="link-muted">Sign in</a></p>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/theme.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/signup.js"></script>
+</body>
+</html>

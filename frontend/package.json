@@ -1,0 +1,14 @@
+{
+  "name": "lifetag-hms-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Plain HTML/CSS/JS multi-page frontend, served in dev via Vite for fast reload.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

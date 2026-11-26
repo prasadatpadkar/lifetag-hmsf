@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('lifetag_theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Billing &mdash; Reception &mdash; Lifetag</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<div class="dash">
+
+  <!-- ============ SIDEBAR (restricted: reception role) ============ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <svg class="brand-glyph" viewBox="0 0 22 26" aria-hidden="true"><path class="g-thread" d="M7 1v9"/><path class="g-body" d="M2 5h12l6 6v13H2z"/><circle class="g-hole" cx="7" cy="12" r="2.6"/></svg>
+      <span class="sidebar__brand-tag">lifetag</span>
+    </div>
+
+    <div class="nav-group-label">OVERVIEW</div>
+    <ul class="nav-list">
+      <li><a href="reception-dashboard.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a></li>
+    </ul>
+
+    <div class="nav-group-label">FRONT DESK</div>
+    <ul class="nav-list">
+      <li><a href="reception-patients.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/></svg>
+        Patients
+      </a></li>
+      <li><a href="reception-appointments.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18"/><path d="M8 3v3M16 3v3"/><path d="M8 14l2.5 2.5L16 11"/></svg>
+        Appointments
+      </a></li>
+      <li><a href="reception-room-bed.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 18v-6a2 2 0 0 1 2-2h6v8"/><path d="M11 12h8a2 2 0 0 1 2 2v4"/><path d="M3 18h18"/><circle cx="7" cy="8" r="1.6"/></svg>
+        Room &amp; Bed
+      </a></li>
+      <li><a href="reception-billing.html" class="nav-link is-active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 14.5h4"/></svg>
+        Billing
+      </a></li>
+      <li><a href="reception-insurance.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3Z"/><path d="M9.3 12.2l1.8 1.8L15 10"/></svg>
+        Insurance
+      </a></li>
+      <li><a href="reception-schemes.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18"/><path d="M4 21V10"/><path d="M20 21V10"/><path d="M2 10l10-6 10 6"/><path d="M8 21v-7"/><path d="M12 21v-7"/><path d="M16 21v-7"/></svg>
+        Government Schemes
+      </a></li>
+    </ul>
+
+    <div class="sidebar__footer">
+      <a href="../index.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        Log out
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar__search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" placeholder="Search patients or appointments...">
+      </div>
+      <div class="topbar__right">
+        <button class="theme-toggle" id="themeToggleBtn" aria-label="Toggle dark mode">
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="Notifications">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="user-chip">
+          <div class="user-chip__avatar" id="receptionInitials">FD</div>
+          <div>
+            <div class="user-chip__name" id="receptionName">Front Desk</div>
+            <div class="user-chip__role">Reception</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="content__header">
+        <h1>Billing &amp; Payment</h1>
+        <p>Generate invoices and record payments at the front desk.</p>
+      </div>
+
+      <section class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon teal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value" id="statPaid">&#8377;0</div>
+          <div class="stat-card__label">Total collected</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon coral">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value" id="statUnpaid">&#8377;0</div>
+          <div class="stat-card__label">Outstanding balance</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon navy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value" id="statCount">0</div>
+          <div class="stat-card__label">Total invoices</div>
+        </div>
+      </section>
+
+      <div class="page-toolbar">
+        <div class="toolbar-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+          <input type="text" id="billSearch" placeholder="Search by patient or invoice ID...">
+        </div>
+        <div class="toolbar-actions">
+          <select class="select-filter" id="statusFilter">
+            <option value="">All status</option>
+            <option value="Paid">Paid</option>
+            <option value="Unpaid">Unpaid</option>
+            <option value="Partial">Partial</option>
+          </select>
+          <button class="btn-add" id="openAddModal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            New Invoice
+          </button>
+        </div>
+      </div>
+
+      <div class="panel panel--full">
+        <table class="data-table data-table--wide">
+          <thead>
+            <tr><th>Invoice</th><th>Patient</th><th>Date</th><th>Total</th><th>Balance</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="billTableBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" style="display:none;">No invoices found.</div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============ NEW / EDIT INVOICE MODAL ============ -->
+<div class="modal-overlay" id="billModalOverlay">
+  <div class="modal modal--wide">
+    <div class="modal__head">
+      <h2 id="modalTitle">New Invoice</h2>
+      <button class="modal__close" id="closeModal" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="billForm">
+      <input type="hidden" id="billId">
+      <div class="form-grid" style="margin-bottom:12px;">
+        <div class="field field--full">
+          <label for="patientSelect">Patient</label>
+          <select id="patientSelect" required><option value="">Select a patient</option></select>
+        </div>
+        <div class="field">
+          <label for="doctorSelect">Doctor (shown on invoice)</label>
+          <select id="doctorSelect"><option value="">&mdash; none &mdash;</option></select>
+        </div>
+        <div class="field">
+          <label for="billDate">Invoice date</label>
+          <input type="date" id="billDate" required>
+        </div>
+      </div>
+
+      <div class="import-box" id="importBox" style="display:none;">
+        <div class="grow" id="importText">Checking the patient's record for un-invoiced charges&hellip;</div>
+        <button type="button" class="btn-secondary" id="importBtn" style="display:none;">Import charges</button>
+      </div>
+
+      <label style="font-size:12px; font-weight:600; color:var(--text-1); display:block; margin-bottom:8px;">Charges</label>
+      <div id="itemsContainer"></div>
+      <button type="button" class="add-item-btn" id="addItemBtn">+ Add charge</button>
+
+      <div class="form-grid" style="margin-bottom:6px;">
+        <div class="field">
+          <label for="billDiscount">Discount (&#8377;)</label>
+          <input type="number" id="billDiscount" min="0" step="1" value="0">
+        </div>
+        <div class="field field--full" id="coverBox">
+          <label>Insurance / government scheme cover</label>
+          <div id="coverInfo" style="font-size:13px; line-height:1.5; padding:10px 12px; border:1px dashed var(--border-1); border-radius:8px; color:var(--text-2);">
+            Cover is applied automatically, and only after an insurer or scheme has <b>sanctioned</b> a claim. File and track claims from the Insurance / Schemes screens.
+          </div>
+        </div>
+        <div class="field">
+          <label for="billDueDate">Due date</label>
+          <input type="date" id="billDueDate">
+        </div>
+        <div class="field">
+          <label for="billStatus">Invoice status</label>
+          <select id="billStatus">
+            <option value="">Automatic (from payments)</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="field" id="paidNowField">
+          <label for="billPaidNow">Amount paid now (&#8377;)</label>
+          <input type="number" id="billPaidNow" min="0" step="0.01" value="0">
+        </div>
+        <div class="field" id="payMethodField">
+          <label for="billPayMethod">Payment method</label>
+          <select id="billPayMethod"><option>Cash</option><option>UPI</option><option>Card</option><option>Net Banking</option><option>Cheque</option></select>
+        </div>
+        <div class="field field--full">
+          <label for="billNotes">Notes</label>
+          <input type="text" id="billNotes" maxlength="500">
+        </div>
+      </div>
+      <p id="paidHint" style="font-size:12px; color:var(--text-2); margin:0 0 8px; display:none;">Payments on an existing invoice are recorded from its invoice page (Record payment) so the payment history stays accurate.</p>
+
+      <div class="bill-summary">
+        <div class="bill-summary__row"><span>Subtotal</span><span id="sumSubtotal">&#8377;0</span></div>
+        <div class="bill-summary__row"><span>Discount</span><span id="sumDiscount">&#8377;0</span></div>
+        <div class="bill-summary__row"><span>GST / tax</span><span id="sumTax">&#8377;0</span></div>
+        <div class="bill-summary__row is-total"><span>Grand total</span><span id="billTotalDisplay">&#8377;0</span></div>
+        <div class="bill-summary__row"><span>Insurance / scheme cover (sanctioned)</span><span id="sumCover">&#8377;0</span></div>
+        <div class="bill-summary__row is-total"><span>Patient payable</span><span id="sumPayable">&#8377;0</span></div>
+        <div class="bill-summary__row" id="sumPendingRow" style="display:none;"><span>Claimed, awaiting sanction (not deducted yet)</span><span id="sumPending">&#8377;0</span></div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn-secondary" id="cancelModal">Cancel</button>
+        <button type="submit" class="btn-primary" style="width:auto; padding:10px 20px;">Save invoice</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="dot-success"></span>
+  <span id="toastMessage">Invoice saved successfully.</span>
+</div>
+
+<script src="../js/theme.js"></script>
+<script src="../js/api-config.js"></script>
+<script src="../js/dashboard.js"></script>
+<script src="../js/menu.js"></script>
+<script src="../js/billing.js"></script>
+</body>
+</html>

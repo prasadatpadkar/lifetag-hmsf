@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lifetag — Hospital Management System — Project Overview</title>
+<style>
+:root {
+  --navy-950: #0B1F2E;
+  --navy-900: #10293B;
+  --teal-500: #1E8A7A;
+  --teal-100: #E1F0EC;
+  --coral-500: #E8604C;
+  --coral-100: #FBE7E3;
+  --gold-500: #A67C00;
+  --gold-100: #FBF1DA;
+  --paper-100: #F6F8F7;
+  --paper-200: #EAEEEC;
+  --slate-500: #5C7079;
+  --slate-300: #A9B7BC;
+  --white: #FFFFFF;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #DCE3E1;
+  font-family: var(--font-body);
+  color: var(--navy-950);
+  padding: 28px;
+}
+.sheet {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: 18px;
+  padding: 34px;
+  box-shadow: 0 20px 60px rgba(11,31,46,0.15);
+}
+/* Header */
+.header {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  padding-bottom: 24px;
+  border-bottom: 3px solid var(--navy-950);
+  margin-bottom: 24px;
+}
+.header h1 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  letter-spacing: 0.01em;
+}
+.header .tag-dot { display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--coral-500); margin-right:8px; }
+.header p {
+  font-size: 0.8438rem;
+  line-height: 1.6;
+  color: var(--slate-500);
+  margin: 8px 0 0 0;
+  max-width: 560px;
+}
+.header-meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  text-align: right;
+}
+.header-meta .badge {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  color: var(--teal-500);
+  background: var(--teal-100);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+/* Layout grid */
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  background: var(--navy-950);
+  padding: 7px 14px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+/* Modules list */
+.module {
+  display: flex;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--paper-200);
+}
+.module:last-child { border-bottom: none; }
+.module__num {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--teal-500);
+  background: var(--teal-100);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.module__title {
+  font-family: var(--font-display);
+  font-size: 0.8438rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+.module__desc {
+  font-size: 0.7188rem;
+  color: var(--slate-500);
+  line-height: 1.5;
+  margin: 0;
+}
+/* ER diagram panel */
+.er-panel {
+  border: 1.5px solid var(--paper-200);
+  border-radius: 14px;
+  padding: 18px;
+  background: var(--paper-100);
+}
+#erd { width: 100%; overflow-x: auto; }
+/* Bottom grid */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.card {
+  border: 1.5px solid var(--paper-200);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card ul { margin: 0; padding: 0; list-style: none; }
+.card li {
+  font-size: 0.7812rem;
+  color: var(--navy-900);
+  padding: 6px 0;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  border-bottom: 1px dashed var(--paper-200);
+}
+.card li:last-child { border-bottom: none; }
+.check { color: var(--teal-500); font-weight: 700; flex-shrink:0; }
+.role-row { display:flex; justify-content:space-between; gap:10px; }
+.role-name { font-weight: 600; font-size: 0.7812rem; }
+.role-desc { font-size: 0.7188rem; color: var(--slate-500); text-align:right; }
+.stack-row { display:flex; justify-content:space-between; }
+.stack-key { font-size: 0.75rem; color: var(--slate-500); }
+.stack-val { font-size: 0.75rem; font-weight: 600; font-family: var(--font-mono); }
+/* Table summary */
+.table-summary {
+  border: 1.5px solid var(--paper-200);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.table-summary table { width: 100%; border-collapse: collapse; }
+.table-summary th {
+  background: var(--navy-950);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 0.6562rem;
+  letter-spacing: 0.05em;
+  text-align: left;
+  padding: 10px 16px;
+}
+.table-summary td {
+  font-size: 0.75rem;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--paper-200);
+}
+.table-summary tr:nth-child(even) td { background: var(--paper-100); }
+.table-summary td:first-child { font-family: var(--font-mono); font-weight: 600; color: var(--navy-900); white-space: nowrap; }
+/* ---------- Responsive ---------- */
+html { -webkit-text-size-adjust: 100%; }
+body { padding: clamp(8px, 3vw, 28px); padding-left: max(clamp(8px, 3vw, 28px), env(safe-area-inset-left)); padding-right: max(clamp(8px, 3vw, 28px), env(safe-area-inset-right)); }
+.sheet { padding: clamp(16px, 3vw, 34px); }
+.header h1 { font-size: clamp(1.25rem, 0.9rem + 1.6vw, 1.75rem); overflow-wrap: anywhere; }
+.layout > *, .bottom-grid > *, .header > * { min-width: 0; }
+#erd svg { max-width: none; }
+@media (min-width: 1680px) { html { font-size: 1.0625rem; } .sheet { max-width: 1600px; } }
+@media (min-width: 2200px) { html { font-size: 1.1875rem; } .sheet { max-width: 1900px; } }
+@media (max-width: 1200px) {
+  .bottom-grid { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 900px) {
+  .header { grid-template-columns: 1fr; }
+  .header-meta { align-items: flex-start; text-align: left; flex-direction: row; flex-wrap: wrap; }
+  .layout { grid-template-columns: 1fr; }
+  .table-summary { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-summary table { min-width: 560px; }
+}
+@media (max-width: 640px) {
+  .bottom-grid { grid-template-columns: 1fr !important; }
+  .card, .er-panel { padding: 14px; }
+  .role-row { flex-direction: column; gap: 2px; }
+  .role-desc { text-align: left; }
+}
+@media (max-width: 380px) { html { font-size: 0.9375rem; } }
+@media print {
+  body { background: white; padding: 0; }
+  .sheet { box-shadow: none; border-radius: 0; padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="header">
+    <div>
+      <h1><span class="tag-dot"></span>LIFETAG — HOSPITAL MANAGEMENT SYSTEM</h1>
+      <p>Lifetag centralizes hospital operations — patient records, doctor scheduling, appointments, billing, blood bank, and bed occupancy — into one role-based system for Admin, Doctor, Reception, and Patient users. Built as a capstone project.</p>
+    </div>
+    <div class="header-meta">
+      <span class="badge">CAPSTONE BUILD · 2026</span>
+      <span class="badge">10 MODULES · 4 ROLES</span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div>
+      <span class="section-label">MODULES OVERVIEW</span>
+
+      <div class="module">
+        <div class="module__num">1</div>
+        <div>
+          <p class="module__title">User Authentication &amp; Roles</p>
+          <p class="module__desc">Login, role-based access (Admin / Doctor / Reception / Patient), real username &amp; password authentication backed by a MySQL database with BCrypt-hashed passwords and JWT session tokens.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">2</div>
+        <div>
+          <p class="module__title">Dashboard</p>
+          <p class="module__desc">Overview stats, recent appointments, ward occupancy, quick links to every module.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">3</div>
+        <div>
+          <p class="module__title">Patient Management</p>
+          <p class="module__desc">Register/update patient records, blood group, address, assigned doctor.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">4</div>
+        <div>
+          <p class="module__title">Doctor Management</p>
+          <p class="module__desc">Manage doctor profiles, specialization, experience, duty status.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">5</div>
+        <div>
+          <p class="module__title">Appointment Management</p>
+          <p class="module__desc">Link patients to doctors, schedule date/time, track status end-to-end.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">6</div>
+        <div>
+          <p class="module__title">Room &amp; Bed Management</p>
+          <p class="module__desc">Ward-wise bed grid, live occupancy, assign/discharge patients per bed.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">7</div>
+        <div>
+          <p class="module__title">Billing &amp; Payment</p>
+          <p class="module__desc">Multi-item invoices with live totals, payment status tracking.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">8</div>
+        <div>
+          <p class="module__title">Insurance</p>
+          <p class="module__desc">Empanelled provider directory, patient policy records, claim submission and Admin approve/reject workflow.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">9</div>
+        <div>
+          <p class="module__title">Blood Bank Management</p>
+          <p class="module__desc">Stock by blood group with low/critical alerts, donor and request records.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">10</div>
+        <div>
+          <p class="module__title">Feedback &amp; Reports</p>
+          <p class="module__desc">Patient ratings and comments, plus dashboard analytics and exportable summaries.</p>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="module__num">11</div>
+        <div>
+          <p class="module__title">Government Schemes</p>
+          <p class="module__desc">Scheme directory (PM-JAY, CGHS, ESI, state schemes), Aadhaar/beneficiary-card enrollment with an Admin eligibility-verification gate, and package-rate claim submission through to government sanction.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <span class="section-label">ER DIAGRAM</span>
+      <div class="er-panel">
+        <div id="erd"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+    <div class="card">
+      <h3>Key features</h3>
+      <ul>
+        <li><span class="check">✓</span>Real authenticated login with role-based access across 4 user types</li>
+        <li><span class="check">✓</span>Real-time bed &amp; ward occupancy tracking</li>
+        <li><span class="check">✓</span>Doctor-scoped patient records for privacy</li>
+        <li><span class="check">✓</span>Dynamic multi-item billing with live totals</li>
+        <li><span class="check">✓</span>Blood stock monitoring with stock-level alerts</li>
+        <li><span class="check">✓</span>Insurance provider directory &amp; claim workflow</li>
+        <li><span class="check">✓</span>Government scheme enrollment with Aadhaar verification gate</li>
+        <li><span class="check">✓</span>Patient feedback &amp; satisfaction analytics</li>
+        <li><span class="check">✓</span>Exportable reports and visual dashboards</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Technology stack (implemented)</h3>
+      <ul>
+        <li class="stack-row"><span class="stack-key">Frontend</span><span class="stack-val">HTML / CSS / JS</span></li>
+        <li class="stack-row"><span class="stack-key">Backend</span><span class="stack-val">Java 17, Spring Boot 3</span></li>
+        <li class="stack-row"><span class="stack-key">Database</span><span class="stack-val">MySQL</span></li>
+        <li class="stack-row"><span class="stack-key">Authentication</span><span class="stack-val">Spring Security, JWT, BCrypt</span></li>
+        <li class="stack-row"><span class="stack-key">Charts</span><span class="stack-val">Chart.js</span></li>
+        <li class="stack-row"><span class="stack-key">Hosting</span><span class="stack-val">Docker Compose / manual (Maven + MySQL)</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Role &amp; permissions</h3>
+      <ul>
+        <li class="role-row"><span class="role-name">Admin</span><span class="role-desc">Full system access, all modules</span></li>
+        <li class="role-row"><span class="role-name">Doctor</span><span class="role-desc">View/update own patients &amp; appointments only</span></li>
+        <li class="role-row"><span class="role-name">Reception</span><span class="role-desc">Manage patients, appointments, billing, insurance, scheme enrollment</span></li>
+        <li class="role-row"><span class="role-name">Patient</span><span class="role-desc">View own records, book appointments</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Current build status</h3>
+      <ul>
+        <li><span class="check">✓</span>Real Spring Boot backend with MySQL — no longer frontend-only</li>
+        <li><span class="check">✓</span>Login verifies real credentials — BCrypt-hashed passwords checked against the database, JWT issued on success</li>
+        <li><span class="check">✓</span>10 real named accounts seeded across all 4 roles (2 Admin, 2 Reception, 3 Doctor, 3 Patient) — see CREDENTIALS.md</li>
+        <li><span class="check">✓</span>Topbar shows the real logged-in identity across all roles</li>
+        <li><span class="check">✓</span>Live current date, not hardcoded, on dashboard &amp; login page</li>
+        <li><span class="check">✓</span>Patients, Doctors, Appointments, Billing, Blood Bank, Feedback, Insurance &amp; Government Schemes all persist in MySQL across relogin and restarts</li>
+        <li style="color:var(--slate-500);"><span class="check" style="color:var(--slate-500);">i</span>"Submit to Government" now records the claim with a clear sandbox reference number and an audit trail instead of vaguely implying a live submission &mdash; it still can't call a real Ayushman Bharat / government-portal API, since that needs actual empanelment &amp; secure credentials this build can't have. Filing on the official portal, and recording the real reference number back, is still a manual step for Admin.</li>
+        <li><span class="check">✓</span>Self-service "forgot password" (emailed reset link, simulated via a logged/on-screen link since there's no mail server) — every user can recover their own account, so no direct database edits are needed and there's no separate admin "reset anyone's password" capability to worry about</li>
+      </ul>
+    </div>
+  </div>
+
+  <span class="section-label">DATABASE TABLES SUMMARY</span>
+  <div class="table-summary">
+    <table>
+      <thead><tr><th>Table name</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>users</td><td>Login accounts — username, BCrypt-hashed password, email, role (ADMIN/DOCTOR/RECEPTION/PATIENT stored as an enum, no separate roles table)</td></tr>
+        <tr><td>doctors</td><td>Doctor profiles — specialization, experience, duty status, optional linked login account</td></tr>
+        <tr><td>patients</td><td>Patient records — demographics, blood group, optional linked login account</td></tr>
+        <tr><td>appointments</td><td>Bookings linking a patient to a doctor with date/time/status</td></tr>
+        <tr><td>rooms_beds</td><td>Combined room + bed record — room number, bed number, type, occupancy status, assigned patient</td></tr>
+        <tr><td>billings</td><td>Patient invoices — amount, discount, amount paid, status, payment method, line items stored as JSON</td></tr>
+        <tr><td>insurance</td><td>Patient insurance policies — provider, policy number, coverage amount, validity, status</td></tr>
+        <tr><td>schemes</td><td>Government/other scheme directory — name, eligibility, benefits, category, status</td></tr>
+        <tr><td>patient_schemes</td><td>Patient enrollment into a scheme — enrollment date, status</td></tr>
+        <tr><td>blood_bank</td><td>Blood stock by group, donor info, expiry, availability status</td></tr>
+        <tr><td>blood_requests</td><td>Blood requests raised for a patient, by ward and status</td></tr>
+        <tr><td>feedback</td><td>Patient ratings and comments per doctor</td></tr>
+        <tr><td>staff_activity</td><td>Audit log of staff actions across the system — who did what, and when</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  themeVariables: {
+    fontFamily: '"IBM Plex Sans", sans-serif',
+    fontSize: '12px',
+    primaryColor: '#E1F0EC',
+    primaryBorderColor: '#1E8A7A',
+    primaryTextColor: '#0B1F2E',
+    lineColor: '#5C7079',
+    tertiaryColor: '#F6F8F7'
+  }
+});
+
+const erd = `erDiagram
+  USERS ||--o| DOCTORS : "linked login (optional)"
+  USERS ||--o| PATIENTS : "linked login (optional)"
+  DOCTORS ||--o{ APPOINTMENTS : attends
+  PATIENTS ||--o{ APPOINTMENTS : books
+  PATIENTS ||--o| ROOMS_BEDS : occupies
+  PATIENTS ||--o{ BILLINGS : billed
+  PATIENTS ||--o{ INSURANCE : holds
+  PATIENTS ||--o{ PATIENT_SCHEMES : enrolls
+  SCHEMES ||--o{ PATIENT_SCHEMES : covers
+  PATIENTS ||--o{ BLOOD_REQUESTS : requests
+  PATIENTS ||--o{ FEEDBACK : gives
+  DOCTORS ||--o{ FEEDBACK : receives
+
+  USERS {
+    long id PK
+    string username
+    string password "BCrypt hash"
+    string email
+    string fullName
+    string role "enum: ADMIN/DOCTOR/RECEPTION/PATIENT"
+    boolean enabled
+    datetime createdAt
+  }
+  DOCTORS {
+    long id PK
+    string name
+    string specialization
+    string department
+    string contact
+    string email
+    string qualification
+    int experienceYears
+    string availableDays
+    string status
+    long user_id FK "optional, nullable"
+  }
+  PATIENTS {
+    long id PK
+    string name
+    int age
+    string gender
+    string contact
+    string email
+    string address
+    string bloodGroup
+    string emergencyContact
+    date registrationDate
+    string status
+    long user_id FK "optional, nullable"
+  }
+  APPOINTMENTS {
+    long id PK
+    long patient_id FK
+    long doctor_id FK
+    date appointmentDate
+    time appointmentTime
+    string reason
+    string status
+    string notes
+  }
+  ROOMS_BEDS {
+    long id PK
+    string roomNumber
+    string bedNumber
+    string roomType
+    string status
+    long patient_id FK "nullable"
+    double chargePerDay
+  }
+  BILLINGS {
+    long id PK
+    long patient_id FK
+    string description
+    decimal amount
+    decimal discount
+    decimal amountPaid
+    string status
+    string paymentMethod
+    string itemsJson "JSON array of line items"
+    date billDate
+  }
+  INSURANCE {
+    long id PK
+    long patient_id FK
+    string provider
+    string policyNumber
+    decimal coverageAmount
+    date validFrom
+    date validTo
+    string status
+  }
+  SCHEMES {
+    long id PK
+    string name
+    string description
+    string eligibility
+    string benefits
+    string category
+    string status
+  }
+  PATIENT_SCHEMES {
+    long id PK
+    long patient_id FK
+    long scheme_id FK
+    date enrollmentDate
+    string status
+  }
+  BLOOD_BANK {
+    long id PK
+    string bloodGroup
+    int unitsAvailable
+    string donorName
+    string donorContact
+    date lastDonationDate
+    date expiryDate
+    string status
+  }
+  BLOOD_REQUESTS {
+    long id PK
+    long patient_id FK
+    string bloodGroup
+    int units
+    string ward
+    string status
+    date requestDate
+  }
+  FEEDBACK {
+    long id PK
+    long patient_id FK
+    long doctor_id FK "nullable"
+    int rating
+    string comments
+    date feedbackDate
+  }
+  STAFF_ACTIVITY {
+    long id PK
+    string staffName
+    string role
+    string action
+    string details
+    datetime timestamp
+  }
+`;
+
+const { svg } = await mermaid.render('erd-svg', erd);
+document.getElementById('erd').innerHTML = svg;
+</script>
+</body>
+</html>

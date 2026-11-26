@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>(function(){try{var t=localStorage.getItem('lifetag_theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Dashboard &mdash; Lifetag</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/dashboard.css">
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<div class="dash">
+
+  <!-- ============ SIDEBAR (restricted: patient role) ============ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <svg class="brand-glyph" viewBox="0 0 22 26" aria-hidden="true"><path class="g-thread" d="M7 1v9"/><path class="g-body" d="M2 5h12l6 6v13H2z"/><circle class="g-hole" cx="7" cy="12" r="2.6"/></svg>
+      <span class="sidebar__brand-tag">lifetag</span>
+    </div>
+
+    <div class="nav-group-label">OVERVIEW</div>
+    <ul class="nav-list">
+      <li><a href="patient-dashboard.html" class="nav-link is-active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a></li>
+    </ul>
+
+    <div class="nav-group-label">MY CARE</div>
+    <ul class="nav-list">
+      <li><a href="patient-appointments.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18"/><path d="M8 3v3M16 3v3"/><path d="M8 14l2.5 2.5L16 11"/></svg>
+        My Appointments
+      </a></li>
+      <li><a href="patient-billing.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 14.5h4"/></svg>
+        My Bills
+      </a></li>
+      <li><a href="patient-insurance.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3Z"/><path d="M9.3 12.2l1.8 1.8L15 10"/></svg>
+        Insurance
+      </a></li>
+      <li><a href="patient-schemes.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18"/><path d="M4 21V10"/><path d="M20 21V10"/><path d="M2 10l10-6 10 6"/><path d="M8 21v-7"/><path d="M12 21v-7"/><path d="M16 21v-7"/></svg>
+        Government Schemes
+      </a></li>
+      <li><a href="patient-feedback.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a8 8 0 1 1-3.4-6.5"/><path d="M21 4v5h-5"/></svg>
+        Feedback
+      </a></li>
+    </ul>
+
+    <div class="sidebar__footer">
+      <a href="../index.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        Log out
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar__search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" placeholder="Search your appointments or bills...">
+      </div>
+      <div class="topbar__right">
+        <button class="theme-toggle" id="themeToggleBtn" aria-label="Toggle dark mode">
+          <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+          <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="Notifications">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="user-chip">
+          <div class="user-chip__avatar" id="patientInitials">RM</div>
+          <div>
+            <div class="user-chip__name" id="patientName">Patient</div>
+            <div class="user-chip__role" id="patientIdLabel">Patient ID: LT-0001</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="content__header">
+        <span class="doctor-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+          Your records only
+        </span>
+        <h1 id="greeting">Welcome back, Rohan</h1>
+        <p>Here&rsquo;s a quick look at your care and billing.</p>
+      </div>
+
+      <!-- Stat cards -->
+      <section class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon teal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value" id="statNextAppt">&mdash;</div>
+          <div class="stat-card__label">Next appointment</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon coral">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value" id="statOutstanding">&#8377;0</div>
+          <div class="stat-card__label">Outstanding balance</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__top">
+            <div class="stat-card__icon navy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3c3.5 4 6 7.2 6 10.2A6 6 0 0 1 6 13.2C6 10.2 8.5 7 12 3Z"/></svg>
+            </div>
+          </div>
+          <div class="stat-card__value" id="statBloodGroup">&mdash;</div>
+          <div class="stat-card__label">Blood group on file</div>
+        </div>
+      </section>
+
+      <!-- Upcoming appointments -->
+      <div class="panel panel--full">
+        <div class="panel__head">
+          <h2>Upcoming appointments</h2>
+          <a href="patient-appointments.html" class="panel__link">View all</a>
+        </div>
+        <table class="data-table data-table--wide">
+          <thead>
+            <tr><th>Doctor</th><th>Date &amp; Time</th><th>Reason</th><th>Status</th></tr>
+          </thead>
+          <tbody id="upcomingApptBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" style="display:none;">No upcoming appointments. Book one from "My Appointments".</div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="../js/theme.js"></script>
+<script src="../js/api-config.js"></script>
+<script src="../js/dashboard.js"></script>
+<script src="../js/menu.js"></script>
+<script src="../js/patient-portal.js"></script>
+</body>
+</html>

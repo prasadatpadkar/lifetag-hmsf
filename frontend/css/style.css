@@ -1,0 +1,516 @@
+/* ==========================================================================
+   LIFETAG DESIGN SYSTEM  ·  "The tag and the thread"
+   --------------------------------------------------------------------------
+   Idea: a LifeTag is the hospital wristband. It is the one object that stays
+   with a patient from the front desk to discharge, and every record in the
+   hospital hangs off it. The interface borrows that object:
+
+     · the TAG    – a card with one clipped corner and a punched hole.
+                    Used sparingly: the stat strip, patient ID band,
+                    modals, the sign-in sheet.
+     · the THREAD – a single ink line that runs through the product
+                    (page headers, timelines, the care journey on sign-in).
+     · wristband colour coding – status is a coloured edge PLUS a shape
+                    (filled / half / hollow / triangle) PLUS a word,
+                    never colour alone.
+
+   Loaded on every page, first. dashboard.css = app shell + components,
+   responsive.css = breakpoints and touch refinements.
+   ========================================================================== */
+
+/* ---------- Type: self-hosted variable fonts (works offline / in Docker) ---------- */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('fonts/bricolage-grotesque-latin-wght-normal.woff2') format('woff2');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Sans';
+  src: url('fonts/instrument-sans-latin-wght-normal.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  /* Colour: chart-stock grey-green ground, ink, one cobalt thread, one tag yellow */
+  --paper:       #E8EBE7;   /* page ground */
+  --sheet:       #F7F8F5;   /* raised writing surface: forms, modals, tables on sheets */
+  --sheet-2:     #EEF0EC;   /* inset surface */
+  --ink:         #111A22;
+  --ink-2:       #4F5C66;   /* secondary text, 6.4:1 on paper */
+  --ink-3:       #7A8791;   /* tertiary / disabled */
+  --line:        #C5CCC7;   /* hairlines */
+  --line-strong: #111A22;   /* structural rules */
+  --thread:      #2236C4;   /* links, focus, primary emphasis */
+  --thread-soft: rgba(34, 54, 196, 0.09);
+  --tag:         #F2C230;   /* the yellow wristband: active nav, key highlights */
+  --tag-ink:     #111A22;   /* text on yellow */
+
+  /* Status (wristband colours) */
+  --ok:          #17794F;
+  --ok-bg:       rgba(23, 121, 79, 0.11);
+  --warn:        #9A6A00;
+  --warn-bg:     rgba(242, 194, 48, 0.24);
+  --bad:         #C1352A;
+  --bad-bg:      rgba(193, 53, 42, 0.10);
+  --info:        #5B3FB8;
+  --info-bg:     rgba(91, 63, 184, 0.10);
+  --calm:        #4F5C66;
+  --calm-bg:     rgba(79, 92, 102, 0.12);
+
+  /* Type */
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    'Instrument Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono:    'Instrument Sans', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Space (4px base) */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
+
+  /* Shape: almost square; the clipped corner does the talking */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --cut: 14px;              /* clipped-corner size */
+
+  /* Depth: one real shadow for floating things, nothing else */
+  --shadow-float: 0 18px 40px -12px rgba(17, 26, 34, 0.35), 0 2px 0 rgba(17, 26, 34, 0.9);
+
+  /* Layout */
+  --sidebar-w: 15.5rem;
+  --content-max: 112rem;
+
+  /* Semantic aliases used across the app */
+  --bg-app:     var(--paper);
+  --bg-surface: var(--sheet);
+  --text-1:     var(--ink);
+  --text-2:     var(--ink-2);
+  --border-1:   var(--line);
+
+  /* Legacy names still referenced by inline styles in a few pages/scripts */
+  --navy-950: var(--ink);
+  --navy-900: var(--ink);
+  --navy-800: #26323C;
+  --teal-500: var(--thread);
+  --teal-400: var(--ok);
+  --teal-100: var(--thread-soft);
+  --coral-500: var(--bad);
+  --gold-500: var(--warn);
+  --paper-100: var(--paper);
+  --paper-200: var(--line);
+  --slate-500: var(--ink-2);
+  --slate-300: var(--ink-3);
+  --slate: var(--ink-2);
+  --white: #FFFFFF;
+}
+
+[data-theme="dark"] {
+  --paper:       #0E1419;
+  --sheet:       #172029;
+  --sheet-2:     #121A21;
+  --ink:         #E9EEEA;
+  --ink-2:       #9CABB5;
+  --ink-3:       #6D7B85;
+  --line:        #26323C;
+  --line-strong: #E9EEEA;
+  --thread:      #8EA2FF;
+  --thread-soft: rgba(142, 162, 255, 0.12);
+  --tag:         #F2C230;
+  --tag-ink:     #111A22;
+
+  --ok:          #4FD39A;
+  --ok-bg:       rgba(79, 211, 154, 0.12);
+  --warn:        #F2C230;
+  --warn-bg:     rgba(242, 194, 48, 0.14);
+  --bad:         #FF7A6B;
+  --bad-bg:      rgba(255, 122, 107, 0.13);
+  --info:        #B6A2FF;
+  --info-bg:     rgba(182, 162, 255, 0.13);
+  --calm:        #9CABB5;
+  --calm-bg:     rgba(156, 171, 181, 0.13);
+
+  --shadow-float: 0 18px 40px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(233, 238, 234, 0.18);
+  --navy-800: #C9D2CC;
+  --white: #0E1419;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  font-feature-settings: 'tnum' 1, 'lnum' 1;   /* figures line up in tables and bills */
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.015em; line-height: 1.15; }
+
+::selection { background: var(--tag); color: var(--tag-ink); }
+
+/* One focus language everywhere: a cobalt ring that survives every background */
+:focus-visible {
+  outline: 2px solid var(--thread);
+  outline-offset: 2px;
+}
+
+a { color: var(--thread); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Brand glyph + wordmark ---------- */
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.brand-glyph { width: 22px; height: 26px; flex: none; overflow: visible; }
+.brand-glyph .g-body { fill: var(--tag); stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+.brand-glyph .g-hole { fill: var(--paper); stroke: var(--ink); stroke-width: 1.8; }
+.brand-glyph .g-thread { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; fill: none; }
+[data-theme="dark"] .brand-glyph .g-body { stroke: var(--paper); }
+
+/* ---------- Theme toggle (shared by auth + app) ---------- */
+.theme-toggle {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--ink); }
+.theme-toggle svg { width: 16px; height: 16px; }
+.theme-toggle .theme-icon-moon { display: none; }
+[data-theme="dark"] .theme-toggle .theme-icon-sun { display: none; }
+[data-theme="dark"] .theme-toggle .theme-icon-moon { display: block; }
+
+/* ==========================================================================
+   AUTH — sign in · sign up · change password
+   Composition: a large editorial statement on the left that carries the
+   product's idea (one tag, the whole journey) and the care thread; the form
+   is a physical tag hanging on the thread on the right. No stock photo.
+   ========================================================================== */
+.screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  background: var(--paper);
+}
+
+/* Left: statement + care thread */
+.brand-panel {
+  position: relative;
+  padding: clamp(28px, 4vw, 56px) clamp(28px, 5vw, 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--s6);
+  border-right: 1px dashed var(--line);        /* the tear-off perforation */
+}
+
+.brand-panel__body { max-width: 40rem; }
+
+.brand-panel__headline {
+  margin: 0 0 var(--s5);
+  font-weight: 700;
+  font-size: clamp(2.6rem, 1.4rem + 4.4vw, 5.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  word-spacing: 0.06em;
+  text-wrap: balance;
+}
+.brand-panel__lede {
+  margin: 0;
+  max-width: 30rem;
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+/* The care thread: the stages one tag travels through */
+.care-thread {
+  list-style: none;
+  margin: 0;
+  padding: var(--s5) 0 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  position: relative;
+  max-width: 44rem;
+}
+.care-thread::before {                        /* the thread itself */
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: calc(var(--s5) + 8px);
+  height: 2px;
+  background: var(--ink);
+}
+.care-thread li {
+  position: relative;
+  padding-top: var(--s5);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.care-thread li::before {                     /* knot */
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+}
+.care-thread li:first-child::before { background: var(--tag); }
+.care-thread small {
+  display: block;
+  margin-top: 2px;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+
+/* Right: the tag */
+.form-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 20px clamp(16px, 5vw, 56px) 40px;
+  overflow: hidden;
+}
+.form-panel__topbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 38px;
+}
+.form-panel__center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.form-card {
+  position: relative;
+  width: 100%;
+  max-width: 25rem;
+  background: var(--sheet);
+  border: 1px solid var(--ink);
+  padding: 64px 32px 32px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.form-card::before {                          /* punched hole */
+  content: '';
+  position: absolute;
+  top: 22px; left: 26px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  z-index: 1;
+}
+.form-card::after {                           /* the thread coming down into the hole */
+  content: '';
+  position: absolute;
+  left: 33px;
+  bottom: calc(100% - 24px);
+  height: 100vh;
+  width: 2px;
+  background: var(--ink);
+}
+/* clipped corner */
+.form-card .tag-corner {
+  position: absolute;
+  top: -1px; right: -1px;
+  width: 26px; height: 26px;
+  background: linear-gradient(225deg, var(--paper) 50%, var(--ink) 50%);
+}
+
+.form-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.03em;
+}
+.form-subtitle {
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+  margin: 0 0 var(--s5) 0;
+  line-height: 1.5;
+}
+
+/* Role switch: four tabs on one rule; the active one is the yellow tag */
+.role-switch {
+  display: flex;
+  gap: 0;
+  margin: 0 0 var(--s5);
+  border-bottom: 2px solid var(--ink);
+}
+.role-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 4px 9px;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  cursor: pointer;
+  border-radius: 0;
+  position: relative;
+  margin-bottom: -2px;
+}
+.role-btn:hover { color: var(--ink); }
+.role-btn.is-active {
+  background: var(--tag);
+  color: var(--tag-ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+/* Fields */
+.field { margin-bottom: 18px; display: flex; flex-direction: column; }
+.field label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.field input,
+.field select,
+.field textarea {
+  border: 1px solid var(--ink-3);
+  background: var(--sheet);
+  border-radius: var(--radius-sm);
+  padding: 11px 12px;
+  font-size: 0.9375rem;
+  font-family: var(--font-body);
+  color: var(--ink);
+  min-width: 0;
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-3); }
+.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--ink); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px var(--tag);
+}
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+  outline: 2px solid var(--thread);
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px var(--tag);
+}
+.field input.is-invalid { border-color: var(--bad); box-shadow: inset 3px 0 0 var(--bad); }
+
+.field-error { font-size: 0.8125rem; color: var(--bad); min-height: 18px; margin-top: 4px; font-weight: 500; }
+
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.checkbox { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--ink-2); cursor: pointer; }
+.checkbox input { accent-color: var(--ink); width: 16px; height: 16px; }
+
+.link-muted { font-size: 0.875rem; color: var(--thread); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+.link-muted:hover { text-decoration-thickness: 2px; }
+
+/* Primary button: ink block with one clipped corner */
+.btn-primary {
+  width: 100%;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 0;
+  padding: 13px 18px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+.btn-primary:hover { background: var(--thread); color: #fff; }
+[data-theme="dark"] .btn-primary:hover { color: var(--paper); }
+.btn-primary:focus-visible { clip-path: none; outline-offset: 3px; }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.form-note {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  min-height: 18px;
+  margin-top: 14px;
+}
+.form-note.is-success { color: var(--ok); font-weight: 600; }
+.form-note.is-error { color: var(--bad); font-weight: 600; }
+
+/* Short, calm entrance for the sign-in tag: the one orchestrated moment */
+@media (prefers-reduced-motion: no-preference) {
+  .form-card { animation: tag-drop 0.7s cubic-bezier(0.2, 0.9, 0.25, 1.05) both; transform-origin: 33px -40px; }
+  @keyframes tag-drop {
+    from { transform: translateY(-36px) rotate(-3deg); opacity: 0; }
+    60%  { opacity: 1; }
+    to   { transform: none; opacity: 1; }
+  }
+}
+
+/* Auth: tablet & phone */
+@media (max-width: 960px) {
+  .screen { grid-template-columns: minmax(0, 1fr); }
+  .brand-panel {
+    border-right: none;
+    border-bottom: 1px dashed var(--line);
+    padding: 20px clamp(20px, 5vw, 40px) 28px;
+    gap: var(--s4);
+  }
+  .brand-panel__headline { font-size: clamp(2.2rem, 9vw, 3.6rem); margin-bottom: var(--s3); }
+  .brand-panel__lede { font-size: 1rem; }
+  .care-thread { display: none; }
+  .form-panel { padding-top: 28px; }
+  .form-panel__center { align-items: flex-start; }
+  .form-card { margin: 0 auto; }
+  .form-card::after { height: 40px; bottom: calc(100% - 24px); }
+}
+@media (max-width: 480px) {
+  .form-card { padding: 60px 20px 24px; box-shadow: 4px 4px 0 var(--ink); }
+  .form-card::before { left: 20px; }
+  .form-card::after { left: 27px; }
+  .brand-panel__lede { display: none; }
+}

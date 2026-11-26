@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: lifetag-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: lifetag_hms
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD must be set (copy .env.example to .env)}
+      MYSQL_USER: ${DB_USERNAME:-lifetag_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set (copy .env.example to .env)}
+    # No published port: only the backend (same compose network) talks to MySQL.
+    # If you need host access for backups/debugging, use "127.0.0.1:3306:3306" - never 0.0.0.0.
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: lifetag-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: lifetag_hms
+      DB_USERNAME: ${DB_USERNAME:-lifetag_user}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set (copy .env.example to .env)}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost}
+      # First-admin bootstrap (only used while the users table is empty).
+      BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:-}
+      BOOTSTRAP_ADMIN_EMAIL: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      BOOTSTRAP_ADMIN_FULL_NAME: ${BOOTSTRAP_ADMIN_FULL_NAME:-Administrator}
+      SEED_DEMO_DATA: "false"
+    # Reachable only from this machine; the public entry point is the nginx frontend, which
+    # proxies /api/* to this container over the compose network.
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: lifetag-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mysql_data:

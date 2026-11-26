@@ -1,0 +1,327 @@
+/* ==========================================================================
+   LIFETAG — RESPONSIVE LAYER
+   Loaded last on every page so it can refine style.css and dashboard.css.
+
+   Breakpoints
+     >= 2200px   TV / ultra-wide     larger text, content capped & centred
+     >= 1680px   large desktop       slightly larger text
+     1101-1679   laptop / desktop    the base design
+     <= 1100px   small laptop, tablet landscape   narrower sidebar, 2-up layouts
+     <= 900px    tablet portrait & phones         off-canvas sidebar drawer
+     <= 640px    phones                           tables become record cards,
+                                                  modals become bottom sheets
+     <= 380px    small phones                     tighter spacing
+   Short landscape phones and touch devices are handled at the end.
+
+   Text is in rem throughout, so it follows both screen size and the user's
+   own browser font setting.
+   ========================================================================== */
+
+/* ---------- 1. Foundations ---------- */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+body { overflow-wrap: break-word; }
+img, svg, video, canvas { max-width: 100%; }
+
+/* Grid/flex children may shrink below their content width; otherwise a long
+   word or a Chart.js canvas can force the whole page to scroll sideways. */
+.main, .content,
+.panel, .chart-panel, .stat-card,
+.panel-row > *, .report-grid-2 > *, .report-grid-3 > *, .stat-grid > *,
+.blood-stock-grid > *, .form-grid > *, .item-row > *, .rec-two > * { min-width: 0; }
+
+@media (max-width: 380px)  { html { font-size: 15px; } }
+@media (min-width: 1680px) { html { font-size: 17px; } }
+@media (min-width: 2200px) { html { font-size: 19px; } }
+@media (min-width: 3000px) { html { font-size: 24px; } }
+
+/* Menu button + drawer backdrop exist in the DOM at every size; hidden on desktop. */
+.menu-btn {
+  display: none;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+  width: 40px; height: 40px;
+  margin-right: 12px;
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  cursor: pointer;
+}
+.menu-btn svg { width: 20px; height: 20px; }
+.sidebar-backdrop { display: none; }
+
+.sidebar { height: 100vh; height: 100dvh; }
+
+/* ---------- 2. Small laptop / tablet landscape ---------- */
+@media (max-width: 1100px) {
+  :root { --sidebar-w: 13.75rem; }
+  .sidebar { padding-left: 14px; padding-right: 10px; }
+  .panel-row, .rec-two, .report-grid-2, .report-grid-3 { grid-template-columns: minmax(0, 1fr); }
+  .blood-stock-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+  .stat-card:nth-child(odd) { border-left: none; padding-left: 0; }
+}
+
+/* ---------- 3. Tablet portrait & phones: off-canvas sidebar ---------- */
+@media (max-width: 900px) {
+  .dash { grid-template-columns: minmax(0, 1fr); }
+
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 17rem; max-width: 86vw;
+    z-index: 60;
+    padding-top: max(22px, env(safe-area-inset-top));
+    padding-bottom: 0;
+    padding-left: max(18px, env(safe-area-inset-left));
+    border-right: 1px solid var(--ink);
+    transform: translateX(-100%);
+    visibility: hidden;
+    overscroll-behavior: contain;
+  }
+  .dash.sidebar-open .sidebar {
+    transform: translateX(0);
+    visibility: visible;
+    box-shadow: 10px 0 0 rgba(17, 26, 34, 0.18);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sidebar { transition: transform 0.22s ease, visibility 0.22s; }
+  }
+  .sidebar-backdrop { position: fixed; inset: 0; z-index: 55; background: rgba(14, 20, 25, 0.55); }
+  .dash.sidebar-open .sidebar-backdrop { display: block; }
+  /* Keep "Log out" in view while a long menu scrolls underneath it. */
+  .sidebar__footer {
+    position: sticky; bottom: 0;
+    background: var(--paper);
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  body.sidebar-locked { overflow: hidden; }
+  .menu-btn { display: flex; }
+
+  .topbar {
+    padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
+    gap: 10px;
+  }
+  .topbar__search { flex: 1; width: auto; min-width: 0; }
+  .topbar__right  { gap: 10px; flex-shrink: 0; }
+
+  .content { padding: 22px max(16px, env(safe-area-inset-right)) 48px max(16px, env(safe-area-inset-left)); }
+  .content__header { margin-bottom: 26px; }
+
+  /* Wide tables scroll sideways inside their panel instead of breaking the page. */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+  .table-scroll > .data-table { min-width: 640px; }
+
+  /* Toolbars: search on its own row, filters + actions share the next. */
+  .page-toolbar { flex-direction: column; align-items: stretch; gap: 12px; }
+  .toolbar-search { width: 100%; }
+  .toolbar-actions { flex-wrap: wrap; width: 100%; }
+  .toolbar-actions > * { flex: 1 1 9rem; min-width: 0; }
+  .toolbar-actions .btn-add, .toolbar-actions .export-btn { justify-content: center; }
+  .panel__head { flex-wrap: wrap; gap: 6px 12px; }
+
+  /* Forms */
+  .form-grid { grid-template-columns: minmax(0, 1fr); }
+  .item-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; }
+  .item-row > .field:first-child { grid-column: 1 / -1; }
+  .item-row--rich { grid-template-columns: 1fr 1fr; }
+
+  /* 16px+ inputs stop iOS Safari zooming the page when a field is focused. */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select, textarea { font-size: max(16px, 1rem) !important; }
+
+  .modal-overlay { padding: 12px; }
+  .modal { padding: 20px 18px; max-height: 92vh; max-height: 92dvh; overscroll-behavior: contain; }
+
+  /* Notifications: a full-width sheet under the top bar, not a 360px popover. */
+  .notif-panel {
+    position: fixed;
+    top: calc(var(--topbar-h, 60px) + 6px);
+    left: 12px; right: 12px;
+    width: auto;
+    max-height: calc(100vh - var(--topbar-h, 60px) - 24px);
+    max-height: calc(100dvh - var(--topbar-h, 60px) - 24px);
+  }
+
+  .feedback-summary { flex-wrap: wrap; gap: 16px 24px; padding: 18px; }
+  .feedback-summary > [id="distribution"] { flex: 1 1 100%; margin-left: 0 !important; }
+  .rating-bar-row { width: 100%; max-width: 360px; }
+
+  .tabs { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { white-space: nowrap; flex-shrink: 0; }
+  .ward-tabs, .section-tabs { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+  .ward-tabs::-webkit-scrollbar, .section-tabs::-webkit-scrollbar { display: none; }
+}
+
+/* ---------- 4. Phones ---------- */
+@media (max-width: 640px) {
+  /* Stat strip: keeps the hole and the clipped corner, numbers go 2-up */
+  .stat-grid, .stat-grid--5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    padding: 24px 18px 22px 48px;
+    row-gap: 24px;
+    clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+  }
+  .stat-grid::before { left: 17px; width: 16px; height: 16px; margin-top: -8px; }
+  .stat-card { padding: 0 8px 0 14px; }
+  .stat-card:nth-child(odd) { padding-left: 0; padding-right: 14px; }
+  .stat-card__label { font-size: 0.8125rem; }
+  .rec-head { padding: 22px 18px 22px 48px; clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%); gap: 14px 16px; }
+  .rec-head::before { left: 17px; width: 16px; height: 16px; margin-top: -8px; }
+  .rec-head__avatar { width: 54px; height: 54px; font-size: 1.375rem; }
+  .blood-stock-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+  .user-chip > div:not(.user-chip__avatar) { display: none; }
+  .topbar__search { padding: 7px 2px; }
+  .content__header h1 { font-size: clamp(1.75rem, 8vw, 2.25rem); }
+
+  /* ---- Data tables become record cards (labels come from each column header) ---- */
+  .table-scroll { overflow: visible; }
+  .table-scroll > .data-table { min-width: 0; }
+  .data-table thead {
+    position: absolute; width: 1px; height: 1px; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;   /* kept for screen readers */
+  }
+  .data-table, .data-table tbody, .data-table tr, .data-table td { display: block; width: 100%; }
+  .data-table tr {
+    background: var(--sheet);
+    border: 1px solid var(--line);
+    border-left: 6px solid var(--ink);
+    padding: 4px 14px;
+    margin-bottom: 12px;
+  }
+  .data-table tbody tr:hover td { background: transparent; }
+  .data-table tr:last-child { margin-bottom: 0; }
+  .data-table td,
+  .data-table--wide td {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 14px;
+    padding: 9px 0;
+    text-align: right;
+    border-bottom: 1px dashed var(--line);
+    font-size: 0.9375rem;
+  }
+  .data-table tr:last-child td { border-bottom: 1px dashed var(--line); }
+  .data-table td:last-child,
+  .data-table tr:last-child td:last-child { border-bottom: none; }
+  .data-table td[data-label]::before {
+    content: attr(data-label);
+    flex: 0 0 34%; max-width: 40%;
+    text-align: left;
+    font-size: 0.8125rem; font-weight: 600;
+    color: var(--ink-2);
+  }
+  .data-table td[data-label=""]::before { display: none; }
+  .data-table td:has(.cell-person) { justify-content: flex-start; text-align: left; }
+  .data-table td:has(.cell-person)::before { display: none; }
+  .data-table td:has(.row-actions) { justify-content: space-between; }
+  .data-table td[colspan] { display: block; text-align: left; border-bottom: none; color: var(--ink-2); }
+  .data-table td[colspan]::before { display: none; }
+  .row-actions { justify-content: flex-end; }
+
+  /* ---- Modals become bottom sheets ---- */
+  .modal-overlay { align-items: flex-end; padding: 0; }
+  .modal {
+    max-width: 100%;
+    max-height: 94vh; max-height: 94dvh;
+    padding: 0 16px 0;
+  }
+  .modal__head {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--sheet);
+    padding: 18px 0 12px;
+    margin-bottom: 8px;
+  }
+  .modal__footer {
+    position: sticky; bottom: 0; z-index: 2;
+    flex-direction: column-reverse;
+    background: var(--sheet);
+    margin-top: 16px;
+    padding: 12px 0 max(14px, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line);
+  }
+  .modal__footer > .btn-primary,
+  .modal__footer > .btn-secondary { width: 100% !important; min-height: 46px; justify-content: center; }
+  .credential-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+  .btn-add, .btn-secondary, .btn-primary, .export-btn { min-height: 44px; }
+  .toolbar-actions > * { flex: 1 1 100%; }
+
+  .toast { left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); justify-content: flex-start; }
+
+  .bed-legend { gap: 8px 16px; }
+  .feedback-summary__score { font-size: 2.75rem; }
+  .bill-total-row { font-size: 1.125rem; }
+  .rec-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; }
+  .rec-stat__value { font-size: 1.5rem; }
+  .inv-parties, .inv-split { grid-template-columns: 1fr; }
+  .invoice { padding: 24px 18px; box-shadow: 4px 4px 0 #111A22; }
+  .ward-tab, .section-tab, .rec-tab { padding-left: 14px; padding-right: 14px; }
+}
+
+/* ---------- 5. Small phones ---------- */
+@media (max-width: 380px) {
+  .content { padding-top: 16px; }
+  .topbar__right { gap: 6px; }
+  .topbar { gap: 8px; }
+  .menu-btn { margin-right: 4px; }
+  .bed-grid { grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); gap: 10px; }
+  .item-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .item-row > .remove-item-btn { grid-column: 1 / -1; width: 100%; }
+  .data-table td[data-label]::before { flex-basis: 38%; }
+}
+@media (max-width: 340px) {
+  .stat-grid, .stat-grid--5 { grid-template-columns: minmax(0, 1fr) !important; }
+  .stat-card, .stat-card:nth-child(odd) { padding: 0; border-left: none; }
+}
+
+/* ---------- 6. Large screens ---------- */
+@media (min-width: 1680px) { .stat-grid { padding-block: 30px 28px; } }
+
+/* ---------- 7. Short landscape phones ---------- */
+@media (max-height: 480px) and (orientation: landscape) {
+  .topbar { position: static; }
+  .modal-overlay { align-items: center; padding: 8px; }
+  .modal { max-height: 96vh; max-height: 96dvh; }
+  .modal__footer { flex-direction: row; }
+  .modal__footer > .btn-primary, .modal__footer > .btn-secondary { width: auto !important; }
+  .sidebar { padding-top: 12px; }
+  .sidebar__brand { padding-bottom: 8px; }
+}
+
+/* ---------- 8. Touch devices: finger-sized targets ---------- */
+@media (pointer: coarse) {
+  .nav-link { padding: 12px 12px 12px 14px; }
+  .icon-btn, .theme-toggle { width: 40px; height: 40px; }
+  .modal__close { width: 40px; height: 40px; }
+  .row-actions { gap: 10px; }
+  .row-actions button { width: 40px; height: 40px; }
+  .remove-item-btn { width: 44px; height: 44px; }
+  .ward-tab, .section-tab, .rec-tab, .tab-btn { min-height: 44px; }
+  .rating-picker button { padding: 6px; }
+  .rating-picker { gap: 2px; }
+  .checkbox input, .field input[type="checkbox"] { width: 20px; height: 20px; }
+  .role-btn { padding: 13px 4px; }
+  .notif-item { padding: 14px 16px; }
+  .notif-item__dismiss { padding: 6px 10px; font-size: 1.25rem; }
+}
+
+/* ---------- 9. Auth pages on large and tall screens ---------- */
+@media (min-width: 1680px) { .screen { grid-template-columns: 1.25fr 1fr; } }
+@media (max-width: 640px) {
+  .field input { min-height: 46px; }
+  .field-row { flex-wrap: wrap; gap: 10px 16px; }
+  .role-btn { font-size: 0.8125rem; }
+}
+@media (max-width: 400px) {
+  .role-switch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-bottom: 0; gap: 0; }
+  .role-btn { border-bottom: 2px solid var(--ink); margin-bottom: 0; }
+}
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 960px) {
+  .brand-panel { padding-block: 12px; }
+  .brand-panel__headline, .brand-panel__lede { display: none; }
+}
+
+@media (max-width: 640px) { .chart-box { height: 240px; } }
+@media (min-width: 2200px) { .chart-box { height: 420px; } }

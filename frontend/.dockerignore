@@ -1,0 +1,12 @@
+Dockerfile
+.dockerignore
+nginx.conf
+README.md
+.gitignore
+.git
+node_modules
+dist
+.vite
+package.json
+package-lock.json
+vite.config.js

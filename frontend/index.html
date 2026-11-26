@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lifetag &mdash; Hospital Management System</title>
+<script>(function(){try{var t=localStorage.getItem('lifetag_theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div class="screen">
+
+  <div class="brand-panel">
+    <a class="wordmark" href="index.html" aria-label="Lifetag home"><svg class="brand-glyph" viewBox="0 0 22 26" aria-hidden="true"><path class="g-thread" d="M7 1v9"/><path class="g-body" d="M2 5h12l6 6v13H2z"/><circle class="g-hole" cx="7" cy="12" r="2.6"/></svg><span>lifetag</span></a>
+
+    <div class="brand-panel__body">
+      <p class="brand-panel__headline">One tag. The whole stay.</p>
+      <p class="brand-panel__lede">Lifetag follows each patient from the front desk to discharge, so every team sees the same record.</p>
+    </div>
+    <ol class="care-thread" aria-label="The journey one tag follows">
+      <li>Registration<small>Patient is tagged</small></li>
+      <li>Appointment<small>Doctor and slot</small></li>
+      <li>Records<small>Notes, vitals, reports</small></li>
+      <li>Admission<small>Room and bed</small></li>
+      <li>Billing<small>Invoice, insurance</small></li>
+    </ol>
+  </div>
+
+  <div class="form-panel">
+    <div class="form-panel__topbar">
+      <button type="button" class="theme-toggle" id="themeToggleBtn" aria-label="Toggle dark mode">
+        <svg class="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+        <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+      </button>
+    </div>
+    <div class="form-panel__center">
+    <div class="form-card">
+      <span class="tag-corner" aria-hidden="true"></span>
+<div class="role-switch" role="tablist" aria-label="Select login role">
+        <button type="button" class="role-btn is-active" data-role="admin">Admin</button>
+        <button type="button" class="role-btn" data-role="doctor">Doctor</button>
+        <button type="button" class="role-btn" data-role="reception">Reception</button>
+        <button type="button" class="role-btn" data-role="patient">Patient</button>
+      </div>
+
+      <h1 class="form-title">Sign in to Lifetag</h1>
+      <p class="form-subtitle" id="roleHint">Enter your admin credentials to continue.</p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="username">Username or ID</label>
+          <input type="text" id="username" name="username" placeholder="e.g. admin.reyes" required>
+          <span class="field-error" id="usernameError"></span>
+        </div>
+
+        <div class="field" id="passwordField">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" minlength="6">
+          <span class="field-error" id="passwordError"></span>
+        </div>
+
+        
+
+        <div class="field-row">
+          <label class="checkbox">
+            <input type="checkbox" id="remember">
+            <span>Remember this device</span>
+          </label>
+          <a href="forgot-password.html" class="link-muted">Change password</a>
+        </div>
+
+        <p class="form-note" id="patientSignupNote" style="display:none;">
+          New patient? <a href="signup.html" class="link-muted" style="text-decoration:underline;">Create an account</a>
+        </p>
+
+        <button type="submit" class="btn-primary">Sign in</button>
+
+        <p class="form-note" id="formNote" aria-live="polite"></p>
+      </form>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/theme.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
