@@ -10,4 +10,7 @@ public class LoginRequest {
 
     @NotBlank
     private String password;
+
+    /** "Remember this device" ticked on the login form: issues a longer-lived token. */
+    private boolean remember;
 }
