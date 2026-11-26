@@ -48,16 +48,16 @@
       <h1 class="form-title">Sign in to Lifetag</h1>
       <p class="form-subtitle" id="roleHint">Enter your admin credentials to continue.</p>
 
-      <form id="loginForm" novalidate>
+      <form id="loginForm" method="post" action="#" autocomplete="on" novalidate>
         <div class="field">
           <label for="username">Username or ID</label>
-          <input type="text" id="username" name="username" placeholder="e.g. admin.reyes" required>
+          <input type="text" id="username" name="username" autocomplete="username" placeholder="e.g. admin.reyes" required>
           <span class="field-error" id="usernameError"></span>
         </div>
 
         <div class="field" id="passwordField">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter your password" minlength="6">
+          <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Enter your password" minlength="6">
           <span class="field-error" id="passwordError"></span>
         </div>
 
