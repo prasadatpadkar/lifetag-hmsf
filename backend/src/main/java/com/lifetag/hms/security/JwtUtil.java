@@ -21,6 +21,10 @@ public class JwtUtil {
     @Value("${app.jwt.expiration-ms}")
     private long expirationMs;
 
+    /** Lifetime when the user ticks "Remember this device" (default 30 days). */
+    @Value("${app.jwt.remember-expiration-ms:2592000000}")
+    private long rememberExpirationMs;
+
     /** JWT signing key is mandatory and must be at least 32 UTF-8 bytes. */
     @PostConstruct
     void validateSecret() {
@@ -34,8 +38,12 @@ public class JwtUtil {
     }
 
     public String generateToken(String username, String role) {
+        return generateToken(username, role, false);
+    }
+
+    public String generateToken(String username, String role, boolean remember) {
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + expirationMs);
+        Date expiry = new Date(now.getTime() + (remember ? rememberExpirationMs : expirationMs));
         return Jwts.builder()
                 .subject(username)
                 .claim("role", role)
