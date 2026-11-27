@@ -39,6 +39,7 @@ public class MenuSeeder implements CommandLineRunner {
             {"RECEPTION", "FRONT DESK", "Patients", "reception-patients.html", "patients", "20"},
             {"RECEPTION", "FRONT DESK", "Appointments", "reception-appointments.html", "calendar", "30"},
             {"RECEPTION", "FRONT DESK", "Room & Bed", "reception-room-bed.html", "bed", "40"},
+            {"RECEPTION", "FRONT DESK", "Blood Bank", "reception-blood-bank.html", "blood", "48"},
             {"RECEPTION", "FRONT DESK", "Billing", "reception-billing.html", "billing", "50"},
             {"RECEPTION", "FRONT DESK", "Insurance", "reception-insurance.html", "shield", "60"},
             {"RECEPTION", "FRONT DESK", "Government Schemes", "reception-schemes.html", "bank", "70"},
@@ -71,7 +72,8 @@ public class MenuSeeder implements CommandLineRunner {
         // versions (so they show up in the sidebar) and never resurrect items an admin removed.
         boolean fresh = repository.count() == 0;
         java.util.Set<String> newPages = java.util.Set.of(
-                "patient-records.html", "reception-admissions.html", "admission-management.html");
+                "patient-records.html", "reception-admissions.html", "admission-management.html",
+                "reception-blood-bank.html");
         java.util.Set<String> existing = new java.util.HashSet<>();
         for (MenuItem m : repository.findAll()) existing.add(m.getRole() + "|" + m.getUrl());
         int added = 0;
