@@ -186,7 +186,7 @@
         updateDot();
       }
     }
-    if (link) window.location.href = link;
+    if (link) window.location.href = resolveNotifLink(link);
   });
 
   markAllBtn.addEventListener('click', (e) => {
@@ -677,3 +677,25 @@ function showCredentialsModal({ role = 'account', username, password }) {
   const main = document.querySelector('.main');
   if (main) new MutationObserver(() => { if (box.value.trim()) apply(); }).observe(main, { childList: true, subtree: true });
 })();
+
+
+// A notification stores one page name, but Admin and Reception have different copies of the same
+// screen (e.g. blood-bank-management.html vs reception-blood-bank.html). Send each role to its own.
+function resolveNotifLink(link) {
+  const role = (localStorage.getItem('lifetag_role') || '').toUpperCase();
+  const toReception = {
+    'blood-bank-management.html': 'reception-blood-bank.html',
+    'patient-management.html': 'reception-patients.html',
+    'appointment-management.html': 'reception-appointments.html'
+  };
+  const toAdmin = {
+    'reception-blood-bank.html': 'blood-bank-management.html',
+    'reception-patients.html': 'patient-management.html',
+    'reception-appointments.html': 'appointment-management.html'
+  };
+  const map = role === 'RECEPTION' ? toReception : role === 'ADMIN' ? toAdmin : null;
+  if (!map) return link;
+  const m = String(link).match(/^([^?#]*)(.*)$/);
+  const file = m[1].split('/').pop();
+  return map[file] ? m[1].replace(file, map[file]) + m[2] : link;
+}
