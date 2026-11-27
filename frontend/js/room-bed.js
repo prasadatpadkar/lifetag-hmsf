@@ -169,5 +169,117 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
+// ---------- Add a new bed / room ----------
+// Works on both the Admin and the Reception page: the button and the pop-up are created here,
+// so no page markup is needed. Uses POST /api/rooms-beds (Admin + Reception are allowed).
+(function setupAddBed() {
+  const header = document.querySelector('.content__header');
+  if (!header) return;
+  const WARDS = ['General Ward', 'ICU', 'Maternity', 'Pediatric'];
+
+  const bar = document.createElement('div');
+  bar.style.cssText = 'display:flex;justify-content:flex-end;margin:0 0 14px';
+  bar.innerHTML = `<button type="button" class="btn-add" id="openAddBed">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Add Bed / Room</button>`;
+  header.insertAdjacentElement('afterend', bar);
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.id = 'addBedOverlay';
+  modal.innerHTML = `
+    <div class="modal">
+      <div class="modal__head">
+        <h2>Add Bed / Room</h2>
+        <button class="modal__close" type="button" id="addBedClose" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="addBedForm" novalidate>
+        <div class="form-grid">
+          <div class="field field--full">
+            <label for="addWard">Ward</label>
+            <select id="addWard">${WARDS.map(w => `<option>${w}</option>`).join('')}</select>
+          </div>
+          <div class="field">
+            <label for="addRoomNo">Room number</label>
+            <input type="text" id="addRoomNo" placeholder="e.g. 104" maxlength="30">
+          </div>
+          <div class="field">
+            <label for="addBedNo">Bed label</label>
+            <input type="text" id="addBedNo" placeholder="e.g. GEN-004" maxlength="30">
+          </div>
+          <div class="field field--full">
+            <label for="addCharge">Charge per day (&#8377;)</label>
+            <input type="number" id="addCharge" min="0" step="50" placeholder="e.g. 1200">
+          </div>
+          <div class="field field--full"><span class="field-error" id="addBedError" style="display:block"></span></div>
+        </div>
+        <div class="modal__footer">
+          <button type="button" class="btn-secondary" id="addBedCancel">Cancel</button>
+          <button type="submit" class="btn-primary" style="width:auto; padding:10px 20px;">Add bed</button>
+        </div>
+      </form>
+    </div>`;
+  document.body.appendChild(modal);
+
+  const f = {
+    ward: modal.querySelector('#addWard'), room: modal.querySelector('#addRoomNo'),
+    bed: modal.querySelector('#addBedNo'), charge: modal.querySelector('#addCharge'),
+    err: modal.querySelector('#addBedError'), form: modal.querySelector('#addBedForm')
+  };
+
+  // Suggest the rate other beds in that ward already use.
+  function suggestCharge() {
+    const sample = beds.find(b => b.roomType === f.ward.value && b.chargePerDay != null);
+    f.charge.value = sample ? sample.chargePerDay : '';
+  }
+  f.ward.addEventListener('change', suggestCharge);
+
+  function open() {
+    f.form.reset(); f.err.textContent = '';
+    f.ward.value = WARDS.includes(activeWard) ? activeWard : WARDS[0];
+    suggestCharge();
+    modal.classList.add('is-open');
+    f.room.focus();
+  }
+  function close() { modal.classList.remove('is-open'); }
+  bar.querySelector('#openAddBed').addEventListener('click', open);
+  modal.querySelector('#addBedClose').addEventListener('click', close);
+  modal.querySelector('#addBedCancel').addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+  f.form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const room = f.room.value.trim();
+    const bedNo = f.bed.value.trim() || room;
+    const charge = f.charge.value === '' ? null : Number(f.charge.value);
+    f.err.textContent = '';
+    if (!room) { f.err.textContent = 'Room number is required.'; return; }
+    if (charge !== null && (isNaN(charge) || charge < 0)) { f.err.textContent = 'Charge per day cannot be negative.'; return; }
+    const clash = beds.some(b => (b.bedNumber || b.roomNumber || '').toLowerCase() === bedNo.toLowerCase());
+    if (clash) { f.err.textContent = `A bed labelled "${bedNo}" already exists. Use a different label.`; return; }
+
+    const btn = f.form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    try {
+      await LifetagAPI.createRoomBed({
+        roomNumber: room, bedNumber: bedNo, roomType: f.ward.value,
+        chargePerDay: charge, status: 'Available'
+      });
+      close();
+      showToast(`Bed ${bedNo} added to ${f.ward.value}.`);
+      logActivity('Created', 'Bed', `${bedNo} — ${f.ward.value}`);
+      activeWard = f.ward.value;
+      document.querySelectorAll('.ward-tab').forEach(t => t.classList.toggle('is-active', t.dataset.ward === activeWard));
+      await loadAll();
+    } catch (err) {
+      f.err.textContent = `Could not add the bed: ${err.message}`;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+
 // ---------- Initial load ----------
 loadAll();
