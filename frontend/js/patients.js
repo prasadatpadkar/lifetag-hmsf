@@ -59,6 +59,11 @@ function renderPatients() {
   }
   emptyState.style.display = 'none';
 
+  // Admin and Reception can open a patient's full medical record (Reception: read-only).
+  const staffRole = (localStorage.getItem('lifetag_role') || '').toUpperCase();
+  const canOpenRecord = staffRole === 'ADMIN' || staffRole === 'RECEPTION';
+  const recordPage = staffRole === 'RECEPTION' ? 'reception-patient-record.html' : 'admin-patient-record.html';
+
   filtered.forEach(p => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -66,7 +71,7 @@ function renderPatients() {
         <div class="cell-person">
           <div class="cell-person__avatar">${escapeHtml(initials(p.name))}</div>
           <div>
-            <div class="cell-person__name">${escapeHtml(p.name)}</div>
+            <div class="cell-person__name">${canOpenRecord ? `<a href="${recordPage}?id=${escapeHtml(p.id)}" title="Open full medical record" style="color:inherit;text-decoration:underline;text-underline-offset:3px">${escapeHtml(p.name)}</a>` : escapeHtml(p.name)}</div>
             <div class="cell-person__meta">Patient ID: LT-${escapeHtml(String(p.id).padStart(4, '0'))}</div>
           </div>
         </div>
@@ -77,8 +82,8 @@ function renderPatients() {
       <td>${escapeHtml(p.status || 'Active')}</td>
       <td>
         <div class="row-actions">
-          ${(localStorage.getItem('lifetag_role') || '').toUpperCase() === 'ADMIN' ? `
-          <a class="edit-btn" href="admin-patient-record.html?id=${escapeHtml(p.id)}" title="Medical record" aria-label="Medical record" style="display:inline-flex;align-items:center;justify-content:center">
+          ${canOpenRecord ? `
+          <a class="edit-btn" href="${recordPage}?id=${escapeHtml(p.id)}" title="Medical record" aria-label="Medical record" style="display:inline-flex;align-items:center;justify-content:center">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
           </a>` : ''}
           ${p.user ? `
