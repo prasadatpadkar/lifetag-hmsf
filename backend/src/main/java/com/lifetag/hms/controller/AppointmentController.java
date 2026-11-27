@@ -82,6 +82,13 @@ public class AppointmentController {
                 return ResponseEntity.status(403).body(new ApiResponse(false, "You can only view your own appointments."));
             }
         }
+        if (principal != null && principal.getUser().getRole() == Role.DOCTOR) {
+            // a doctor sees only THEIR OWN bookings with this patient, never another doctor's
+            Long myId = doctorRepository.findByUserId(principal.getUser().getId()).map(d -> d.getId()).orElse(-1L);
+            return ResponseEntity.ok(appointmentRepository.findByPatientId(patientId).stream()
+                    .filter(ap -> ap.getDoctor() != null && myId.equals(ap.getDoctor().getId()))
+                    .toList());
+        }
         return ResponseEntity.ok(appointmentRepository.findByPatientId(patientId));
     }
 
