@@ -32,6 +32,10 @@ public class PatientController {
     @Autowired
     private PatientRepository patientRepository;
     @Autowired
+    private com.lifetag.hms.repository.AppointmentRepository appointmentRepository;
+    @Autowired
+    private com.lifetag.hms.repository.DoctorRepository doctorRepository;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -56,7 +60,8 @@ public class PatientController {
         return ResponseEntity.ok(patientRepository.findAll());
     }
 
-    /** Staff and doctors can open any patient; a patient can only open their own record. */
+    /** Staff can open any patient; a patient only their own record; a doctor only the patients
+     *  who have booked with that doctor. */
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal principal) {
         if (principal == null) {
@@ -68,6 +73,13 @@ public class PatientController {
                     .map(p -> p.getId().equals(id)).orElse(false);
             if (!own) {
                 return ResponseEntity.status(403).body(new ApiResponse(false, "You can only view your own record."));
+            }
+        }
+        if (role == Role.DOCTOR) {
+            boolean linked = doctorRepository.findByUserId(principal.getUser().getId())
+                    .map(d -> appointmentRepository.existsByDoctorIdAndPatientId(d.getId(), id)).orElse(false);
+            if (!linked) {
+                return ResponseEntity.status(403).body(new ApiResponse(false, "You can only view patients who have booked with you."));
             }
         }
         return patientRepository.findById(id)
