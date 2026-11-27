@@ -58,6 +58,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/blood-requests/**").hasAnyRole("ADMIN", "RECEPTION", "DOCTOR")
                 .requestMatchers("/api/rooms-beds/**", "/api/blood-bank/**", "/api/blood-requests/**")
                     .hasAnyRole("ADMIN", "RECEPTION")
+                // Money / cover data is never a doctor's business. Without this, a doctor could call
+                // e.g. /api/billing/patient/{id} for ANY patient, not just the ones they treat.
+                .requestMatchers("/api/billing/**", "/api/insurance/**", "/api/insurance-claims/**",
+                        "/api/patient-schemes/**", "/api/scheme-claims/**")
+                    .hasAnyRole("ADMIN", "RECEPTION", "PATIENT")
                 // Hospital-wide analytics (revenue etc.) are Admin-only.
                 .requestMatchers("/api/reports/**").hasRole("ADMIN")
                 // Audit trail and menu management are administrator-only.
