@@ -29,7 +29,8 @@ import java.util.*;
  *                     (the same "assigned patients" rule the My Patients screen uses). The doctor
  *                     sees the patient's WHOLE history, including what other doctors did earlier.
  *  - Patient        : read only, and only their own record.
- *  - Reception      : no clinical access, but may admit / discharge patients (bed allocation).
+ *  - Reception      : may READ any patient's full record (read-only) and admit / discharge patients
+ *                     (bed allocation). Cannot add or change clinical entries.
  */
 @RestController
 @RequestMapping("/api/clinical")
@@ -61,7 +62,7 @@ public class ClinicalController {
 
     private boolean canRead(UserPrincipal p, Long patientId) {
         Role role = roleOf(p);
-        if (role == Role.ADMIN) return true;
+        if (role == Role.ADMIN || role == Role.RECEPTION) return true;
         if (role == Role.PATIENT) {
             return patientRepository.findByUserId(p.getUser().getId())
                     .map(pt -> pt.getId().equals(patientId)).orElse(false);
